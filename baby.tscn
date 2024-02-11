@@ -1,0 +1,52 @@
+[gd_scene load_steps=8 format=3 uid="uid://dxbin7m2jqlen"]
+
+[ext_resource type="Script" path="res://baby.gd" id="1_j7h1o"]
+[ext_resource type="Texture2D" uid="uid://bmqeamk28mtpm" path="res://images/pngtree-the-baby-crying-in-the-blue-swaddle-png-image_1000273.png" id="1_pyvjd"]
+[ext_resource type="Texture2D" uid="uid://diirhb254orhk" path="res://images/cartoon-baby-1.png" id="3_tgy4v"]
+[ext_resource type="Texture2D" uid="uid://d34dyedj7p5sb" path="res://images/cartoon-zombie-baby-vector-1580932-1.png.png" id="4_owcuk"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_x3eeq"]
+bounce = 1.2
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_y70dv"]
+radius = 47.0425
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_km81c"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_pyvjd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_tgy4v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_owcuk")
+}],
+"loop": true,
+"name": &"baby",
+"speed": 5.0
+}]
+
+[node name="Baby" type="RigidBody2D" groups=["babies"]]
+collision_layer = 3
+mass = 19.07
+physics_material_override = SubResource("PhysicsMaterial_x3eeq")
+gravity_scale = 0.5
+max_contacts_reported = 2
+contact_monitor = true
+script = ExtResource("1_j7h1o")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_y70dv")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.3, 0.3)
+sprite_frames = SubResource("SpriteFrames_km81c")
+animation = &"baby"
+frame_progress = 0.821231
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

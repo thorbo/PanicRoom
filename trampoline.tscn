@@ -1,0 +1,44 @@
+[gd_scene load_steps=6 format=3 uid="uid://criovop2g1tx8"]
+
+[ext_resource type="Texture2D" uid="uid://egkjhnd6ouyy" path="res://images/trampoline.png" id="1_cwjdt"]
+[ext_resource type="Texture2D" uid="uid://cuhu3t6wessxh" path="res://images/trampoline2.png" id="2_yymj5"]
+[ext_resource type="Script" path="res://trampoline.gd" id="3_1fykx"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hjrdb"]
+size = Vector2(304, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rf0dr"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_yymj5")
+}, {
+"duration": 0.5,
+"texture": ExtResource("1_cwjdt")
+}],
+"loop": false,
+"name": &"default",
+"speed": 4.0
+}]
+
+[node name="Trampoline" type="RigidBody2D"]
+gravity_scale = 0.0
+lock_rotation = true
+freeze = true
+freeze_mode = 1
+max_contacts_reported = 3
+contact_monitor = true
+script = ExtResource("3_1fykx")
+speed = 750
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -16)
+shape = SubResource("RectangleShape2D_hjrdb")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.75, 0.75)
+sprite_frames = SubResource("SpriteFrames_rf0dr")
+frame = 1
+frame_progress = 1.0
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

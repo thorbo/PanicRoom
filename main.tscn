@@ -1,0 +1,77 @@
+[gd_scene load_steps=10 format=3 uid="uid://krobmuly4mh3"]
+
+[ext_resource type="PackedScene" uid="uid://b6h3aoa5hub7s" path="res://hud.tscn" id="1_048g1"]
+[ext_resource type="Script" path="res://main.gd" id="1_abs2m"]
+[ext_resource type="PackedScene" uid="uid://dxbin7m2jqlen" path="res://baby.tscn" id="2_v3uqe"]
+[ext_resource type="PackedScene" uid="uid://criovop2g1tx8" path="res://trampoline.tscn" id="4_lol2n"]
+[ext_resource type="AudioStream" uid="uid://c5gwpnd01w8l3" path="res://music/Hot Butter - Popcorn.mp3" id="5_ghxlr"]
+[ext_resource type="Texture2D" uid="uid://dd4clvkcp4qdv" path="res://images/dark room.png" id="6_liodg"]
+[ext_resource type="Texture2D" uid="uid://b22cedgpdhp1j" path="res://images/light room.png" id="7_4vydr"]
+
+[sub_resource type="Curve2D" id="Curve2D_nxlma"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 648, 0, 0, 0, 0, 0, 0)
+}
+point_count = 2
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ks77n"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_liodg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_4vydr")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Main" type="Node"]
+script = ExtResource("1_abs2m")
+baby_scene = ExtResource("2_v3uqe")
+
+[node name="HUD" parent="." instance=ExtResource("1_048g1")]
+
+[node name="Trampoline" parent="." instance=ExtResource("4_lol2n")]
+position = Vector2(466, 603)
+constant_force = Vector2(0, -500)
+
+[node name="LaunchTimer" type="Timer" parent="."]
+
+[node name="LaunchPath" type="Path2D" parent="."]
+curve = SubResource("Curve2D_nxlma")
+
+[node name="LaunchLocation" type="PathFollow2D" parent="LaunchPath"]
+position = Vector2(0, 648)
+rotation = -1.5708
+
+[node name="Music" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_ghxlr")
+
+[node name="GameTicker" type="Timer" parent="."]
+
+[node name="StartButton" type="Button" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -23.0
+offset_top = -93.0
+offset_right = 23.0
+offset_bottom = -62.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 30
+text = "Start"
+
+[node name="Background" type="AnimatedSprite2D" parent="."]
+z_index = -2
+position = Vector2(562, 182)
+sprite_frames = SubResource("SpriteFrames_ks77n")
+
+[connection signal="timeout" from="LaunchTimer" to="." method="_on_launch_timer_timeout"]
+[connection signal="timeout" from="GameTicker" to="." method="_on_game_ticker_timeout"]
+[connection signal="pressed" from="StartButton" to="." method="_on_start_button_pressed"]
